@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.maciejheintze.githubsearchapp.ui.theme.GithubSearchAppTheme
+import com.maciejheintze.githubsearchapp.presentation.ui.theme.GithubSearchAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.maciejheintze.githubsearchapp.ui.theme
+package com.maciejheintze.githubsearchapp.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
