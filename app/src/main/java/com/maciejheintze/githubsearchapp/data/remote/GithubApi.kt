@@ -1,6 +1,6 @@
 package com.maciejheintze.githubsearchapp.data.remote
 
-import com.maciejheintze.githubsearchapp.data.remote.dto.GithubRepositoryDto
+import com.maciejheintze.githubsearchapp.data.remote.dto.repositoryId.GithubRepositoryDto
 import com.maciejheintze.githubsearchapp.data.remote.dto.commits.CommitsDto
 import retrofit2.http.GET
 import retrofit2.http.Path
