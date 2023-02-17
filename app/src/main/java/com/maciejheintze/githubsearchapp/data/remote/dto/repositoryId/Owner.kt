@@ -1,4 +1,4 @@
-package com.maciejheintze.githubsearchapp.data.remote.dto
+package com.maciejheintze.githubsearchapp.data.remote.dto.repositoryId
 
 import com.google.gson.annotations.SerializedName
 

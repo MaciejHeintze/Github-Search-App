@@ -1,7 +1,7 @@
-package com.maciejheintze.githubsearchapp.data.remote.dto
+package com.maciejheintze.githubsearchapp.data.remote.dto.repositoryId
 
 import com.google.gson.annotations.SerializedName
-import com.maciejheintze.githubsearchapp.domain.model.GithubRepositoryId
+import com.maciejheintze.githubsearchapp.db.model.GithubRepositoryId
 
 data class GithubRepositoryDto(
     @SerializedName("incomplete_results")

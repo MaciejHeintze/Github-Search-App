@@ -1,4 +1,4 @@
-package com.maciejheintze.githubsearchapp.domain.model
+package com.maciejheintze.githubsearchapp.db.model
 
 data class CommitDetail(
     val message: String,
