@@ -1,7 +1,7 @@
 package com.maciejheintze.githubsearchapp.data.remote.dto.commits
 
 import com.google.gson.annotations.SerializedName
-import com.maciejheintze.githubsearchapp.domain.model.CommitDetail
+import com.maciejheintze.githubsearchapp.db.model.CommitDetail
 
 data class CommitsDtoItem(
     var author: Author? = null,
