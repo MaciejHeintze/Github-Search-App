@@ -10,10 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.maciejheintze.githubsearchapp.presentation.ui.theme.Purple500
 import kotlinx.coroutines.CoroutineScope
 
 open class BaseActivity : ComponentActivity(), UIController, LifecycleOwner, CoroutineScope {
@@ -32,7 +32,7 @@ open class BaseActivity : ComponentActivity(), UIController, LifecycleOwner, Cor
             ) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(104.dp),
-                    color = Color.Green
+                    color = Purple500
                 )
             }
         }
