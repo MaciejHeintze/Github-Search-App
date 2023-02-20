@@ -6,17 +6,17 @@ import androidx.lifecycle.viewModelScope
 import com.maciejheintze.githubsearchapp.base.BaseViewModel
 import com.maciejheintze.githubsearchapp.db.model.CommitDetail
 import com.maciejheintze.githubsearchapp.db.model.GithubRepositoryId
+import com.maciejheintze.githubsearchapp.db.model.RepositoryEntity
 import com.maciejheintze.githubsearchapp.domain.doToggleLoadingStateOf
 import com.maciejheintze.githubsearchapp.domain.launchWith
-import com.maciejheintze.githubsearchapp.domain.usecase.CommitDetailUseCaseParams
-import com.maciejheintze.githubsearchapp.domain.usecase.GetCommitsUseCase
-import com.maciejheintze.githubsearchapp.domain.usecase.GetRepositoryUseCase
-import com.maciejheintze.githubsearchapp.domain.usecase.RepositoryIdUseCaseParams
+import com.maciejheintze.githubsearchapp.domain.usecase.*
 import kotlinx.coroutines.flow.*
 
 class MainViewModel(
     private val getRepositoryUseCase: GetRepositoryUseCase,
-    private val getCommitsUseCase: GetCommitsUseCase
+    private val getCommitsUseCase: GetCommitsUseCase,
+    private val saveRepositoryDetailUseCase: SaveRepositoryDetailUseCase,
+    private val getLocalRepositoryDetailsListUseCase: GetLocalRepositoryDetailsListUseCase,
 ) : BaseViewModel() {
 
     private val _repositoryId = MutableLiveData<GithubRepositoryId>()
@@ -26,6 +26,10 @@ class MainViewModel(
     private val _commits = MutableLiveData<List<CommitDetail>>()
     val commits: LiveData<List<CommitDetail>>
         get() = _commits
+
+    private val _repositoryDetailList = MutableLiveData<List<RepositoryEntity>>()
+    val repositoryDetailList: LiveData<List<RepositoryEntity>>
+        get() = _repositoryDetailList
 
     fun fetchRepositoryIdAndCommits(owner: String, repo: String) {
         getRepositoryUseCase(
@@ -43,6 +47,13 @@ class MainViewModel(
         ) { id, commitsList ->
             _repositoryId.value = id
             _commits.value = commitsList
+
+            saveRepositoryDetailsToLocalDb(
+                owner = owner,
+                repo = repo,
+                id = id.id,
+                commitsList = commitsList,
+            )
         }
             .doToggleLoadingStateOf(this)
             .launchWith(
@@ -53,4 +64,40 @@ class MainViewModel(
             )
     }
 
+    private fun saveRepositoryDetailsToLocalDb(
+        owner: String,
+        repo: String,
+        id: Int,
+        commitsList: List<CommitDetail>,
+    ) {
+        val repositoryDetail = RepositoryEntity(
+            id = id,
+            owner = owner,
+            repo = repo,
+            commitDetails = commitsList,
+        )
+        saveRepositoryDetailUseCase(repositoryDetail)
+            .doToggleLoadingStateOf(this)
+            .launchWith(
+                scope = viewModelScope,
+                onError = {
+                    showErrorMessage(it)
+                }
+            )
+    }
+
+    fun getLocalRepositoryDetailList() {
+        getLocalRepositoryDetailsListUseCase(Unit)
+            .doToggleLoadingStateOf(this)
+            .onEach {
+                _repositoryDetailList.value = it
+            }
+            .doToggleLoadingStateOf(this)
+            .launchWith(
+                scope = viewModelScope,
+                onError = {
+                    showErrorMessage(it)
+                }
+            )
+    }
 }
