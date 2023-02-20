@@ -27,7 +27,12 @@ fun MainScreen(viewModel: MainViewModel) {
                         icon = { Icon(item.icon, contentDescription = item.title) },
                         label = { Text(item.title) },
                         selected = selectedItem == item,
-                        onClick = { selectedItem = item }
+                        onClick = {
+                            selectedItem = item
+                            if(item == NavigationItem.History) {
+                                viewModel.getLocalRepositoryDetailList()
+                            }
+                        }
                     )
                 }
             }
