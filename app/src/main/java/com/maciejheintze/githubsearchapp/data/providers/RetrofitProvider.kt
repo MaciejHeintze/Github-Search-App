@@ -16,7 +16,7 @@ class RetrofitProviderImpl(
 ) : RetrofitProvider {
     override fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL) //TODO - move BASE_URL to gradle
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
