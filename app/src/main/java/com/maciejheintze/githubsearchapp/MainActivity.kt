@@ -28,9 +28,9 @@ class MainActivity : BaseActivity() {
 
 }
 
-sealed class NavigationItem(val title: String, val icon: ImageVector) {
-    object Search : NavigationItem("Search", Icons.Filled.Search)
-    object History : NavigationItem("History", Icons.Filled.Refresh)
+sealed class NavigationItem(val title: String, val icon: Int, val screenRoute: String) {
+    object Search : NavigationItem("Search", R.drawable.ic_search, "search")
+    object History : NavigationItem("History", R.drawable.ic_history, "history")
 }
 
 

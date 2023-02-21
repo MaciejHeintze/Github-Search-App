@@ -94,12 +94,14 @@ fun RepositoryContent(viewModel: MainViewModel) {
                 viewModel.isLoading.observeAsState().value?.let {
                     if (!it.isLoading) {
                         Column(modifier = Modifier.fillMaxSize()) {
-                            Text(
-                                "Repository ID: ${githubRepositoryId?.id}",
-                                modifier = Modifier.padding(16.dp),
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
+                            githubRepositoryId?.let {
+                                Text(
+                                    "Repository ID: ${githubRepositoryId.id}",
+                                    modifier = Modifier.padding(16.dp),
+                                    fontSize = 26.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
                             if (!commitsList.isNullOrEmpty()) {
                                 LazyColumn(modifier = Modifier.weight(1f)) {
                                     items(commitsList) { commit ->
