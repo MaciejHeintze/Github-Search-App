@@ -61,6 +61,11 @@ class MainViewModel(
                 scope = viewModelScope,
                 onError = {
                     showErrorMessage(it)
+                    showPopup(
+                        title = "Error fetching repository",
+                        message = it.message,
+                        buttonLabel = "OK"
+                    )
                 }
             )
     }
@@ -113,6 +118,11 @@ class MainViewModel(
                 scope = viewModelScope,
                 onError = {
                     showErrorMessage(it)
+                    showPopup(
+                        title = "Error fetching saved repository",
+                        message = it.message,
+                        buttonLabel = "OK"
+                    )
                 }
             )
     }

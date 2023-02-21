@@ -2,10 +2,6 @@ package com.maciejheintze.githubsearchapp
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.maciejheintze.githubsearchapp.base.BaseActivity
 import com.maciejheintze.githubsearchapp.presentation.MainViewModel
 import com.maciejheintze.githubsearchapp.presentation.screen.main.MainScreen
@@ -22,6 +18,8 @@ class MainActivity : BaseActivity() {
             GithubSearchAppTheme {
                 MainScreen(viewModel = viewModel)
                 SetLoading(viewModel = viewModel)
+                Toast(viewModel = viewModel)
+                Popup(viewModel = viewModel)
             }
         }
     }

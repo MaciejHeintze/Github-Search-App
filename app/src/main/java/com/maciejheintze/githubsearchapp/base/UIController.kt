@@ -11,4 +11,14 @@ interface UIController : CoroutineScope {
         isLoading: Boolean,
         LoadingBackground: @Composable BoxScope.() -> Unit
     )
+
+    fun showToast(message: String)
+
+    @Composable
+    fun showPopup(
+        title: String?,
+        message: String?,
+        buttonLabel: String?,
+        onDismiss: (() -> Unit)?
+    )
 }
