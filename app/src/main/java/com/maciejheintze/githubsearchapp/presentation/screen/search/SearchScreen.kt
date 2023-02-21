@@ -89,27 +89,23 @@ fun SearchScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) {
 @Composable
 fun RepositoryContent(viewModel: MainViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
-        viewModel.repositoryEntity.observeAsState().value.let { repositoryEntity ->
-            viewModel.repositoryId.observeAsState().value.let { githubRepositoryId ->
-                viewModel.commits.observeAsState().value.let { commitsList ->
-                    viewModel.isLoading.observeAsState().value?.let {
-                        if (!it.isLoading) {
-                            Column(modifier = Modifier.fillMaxSize()) {
-                                val repoId = githubRepositoryId?.id ?: repositoryEntity?.id
-                                repoId?.let { id ->
-                                    Text(
-                                        "Repository ID: $id",
-                                        modifier = Modifier.padding(16.dp),
-                                        fontSize = 26.sp,
-                                        fontWeight = FontWeight.Bold,
-                                    )
-                                }
-                                val commits = repositoryEntity?.commitDetails ?: commitsList
-                                if (!commits.isNullOrEmpty()) {
-                                    LazyColumn(modifier = Modifier.weight(1f)) {
-                                        items(commits) { commit ->
-                                            CommitItem(commit = commit)
-                                        }
+        viewModel.repositoryId.observeAsState().value.let { githubRepositoryId ->
+            viewModel.commits.observeAsState().value.let { commitsList ->
+                viewModel.isLoading.observeAsState().value?.let {
+                    if (!it.isLoading) {
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            githubRepositoryId?.id?.let {
+                                Text(
+                                    "Repository ID: ${githubRepositoryId.id}",
+                                    modifier = Modifier.padding(16.dp),
+                                    fontSize = 26.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
+                            if (!commitsList.isNullOrEmpty()) {
+                                LazyColumn(modifier = Modifier.weight(1f)) {
+                                    items(commitsList) { commit ->
+                                        CommitItem(commit = commit)
                                     }
                                 }
                             }

@@ -41,7 +41,7 @@ fun BottomNavigation(
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screenRoute,
                 onClick = {
-                    viewModel.getLocalRepositoryDetailList()
+                    viewModel.getLocalRepositoriesDetailList()
                     navController.navigate(item.screenRoute) {
                         navController.graph.startDestinationRoute?.let { route ->
                             popUpTo(route) {
