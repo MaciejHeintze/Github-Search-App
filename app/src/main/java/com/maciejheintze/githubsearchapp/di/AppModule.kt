@@ -8,10 +8,7 @@ import com.maciejheintze.githubsearchapp.data.remote.GithubApi
 import com.maciejheintze.githubsearchapp.db.AppDatabase
 import com.maciejheintze.githubsearchapp.db.DATABASE_NAME
 import com.maciejheintze.githubsearchapp.db.util.Converters
-import com.maciejheintze.githubsearchapp.domain.usecase.GetCommitsUseCase
-import com.maciejheintze.githubsearchapp.domain.usecase.GetLocalRepositoryDetailsListUseCase
-import com.maciejheintze.githubsearchapp.domain.usecase.GetRepositoryUseCase
-import com.maciejheintze.githubsearchapp.domain.usecase.SaveRepositoryDetailUseCase
+import com.maciejheintze.githubsearchapp.domain.usecase.*
 import com.maciejheintze.githubsearchapp.presentation.MainViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -54,6 +51,7 @@ val appModule = module {
     single { GetCommitsUseCase(api = get()) }
     single { SaveRepositoryDetailUseCase(dao = get()) }
     single { GetLocalRepositoryDetailsListUseCase(dao = get()) }
+    single { GetRepositoryDetailsUseCase(dao = get()) }
 
     viewModel {
         MainViewModel(
@@ -61,6 +59,7 @@ val appModule = module {
             getCommitsUseCase = get(),
             saveRepositoryDetailUseCase = get(),
             getLocalRepositoryDetailsListUseCase = get(),
+            getRepositoryDetailsUseCase = get(),
         )
     }
 }

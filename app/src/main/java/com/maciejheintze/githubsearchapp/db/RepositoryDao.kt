@@ -13,4 +13,7 @@ interface RepositoryDao {
 
     @Query("SELECT * FROM repository")
      fun getRepositoryHistory(): List<RepositoryEntity>
+
+    @Query("SELECT * FROM repository WHERE id = :id")
+    fun getRepositoryDetails(id: Int): RepositoryEntity
 }
