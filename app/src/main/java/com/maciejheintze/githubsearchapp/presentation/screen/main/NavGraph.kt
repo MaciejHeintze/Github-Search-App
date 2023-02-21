@@ -22,7 +22,7 @@ fun NavGraph(
             SearchScreen(viewModel = viewModel)
         }
         composable(NavigationItem.History.screenRoute) {
-            HistoryScreen(viewModel = viewModel)
+            HistoryScreen(viewModel = viewModel, navController = navController)
         }
     }
 }

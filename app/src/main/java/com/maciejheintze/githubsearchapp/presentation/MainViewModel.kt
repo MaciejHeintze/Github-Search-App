@@ -17,6 +17,7 @@ class MainViewModel(
     private val getCommitsUseCase: GetCommitsUseCase,
     private val saveRepositoryDetailUseCase: SaveRepositoryDetailUseCase,
     private val getLocalRepositoryDetailsListUseCase: GetLocalRepositoryDetailsListUseCase,
+    private val getRepositoryDetailsUseCase: GetRepositoryDetailsUseCase,
 ) : BaseViewModel() {
 
     private val _repositoryId = MutableLiveData<GithubRepositoryId>()
@@ -30,6 +31,10 @@ class MainViewModel(
     private val _repositoryDetailList = MutableLiveData<List<RepositoryEntity>>()
     val repositoryDetailList: LiveData<List<RepositoryEntity>>
         get() = _repositoryDetailList
+
+    private val _repositoryEntity = MutableLiveData<RepositoryEntity>()
+    val repositoryEntity: LiveData<RepositoryEntity>
+        get() = _repositoryEntity
 
     fun fetchRepositoryIdAndCommits(owner: String, repo: String) {
         getRepositoryUseCase(
@@ -93,6 +98,20 @@ class MainViewModel(
                 _repositoryDetailList.value = it
             }
             .doToggleLoadingStateOf(this)
+            .launchWith(
+                scope = viewModelScope,
+                onError = {
+                    showErrorMessage(it)
+                }
+            )
+    }
+
+    fun getRepositoryDetails(repositoryEntity: RepositoryEntity) {
+        getRepositoryDetailsUseCase(repositoryEntity)
+            .doToggleLoadingStateOf(this)
+            .onEach {
+                _repositoryEntity.value = it
+            }
             .launchWith(
                 scope = viewModelScope,
                 onError = {
