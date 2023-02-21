@@ -92,13 +92,14 @@ open class BaseActivity : ComponentActivity(), UIController, LifecycleOwner, Cor
         val openDialog = remember { mutableStateOf(true) }
         if (openDialog.value) {
             AlertDialog(
-                onDismissRequest = {},
+                onDismissRequest = { openDialog.value = false },
                 title = { Text(title ?: "") },
                 text = { Text(message ?: "") },
                 confirmButton = {
                     Button(
                         onClick = {
                             openDialog.value = false
+                            onDismiss?.invoke()
                         }) {
                         Text(buttonLabel ?: "")
                     }

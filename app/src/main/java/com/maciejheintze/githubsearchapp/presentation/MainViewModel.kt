@@ -33,6 +33,7 @@ class MainViewModel(
         get() = _repositoryDetailList
 
     fun fetchRepositoryIdAndCommits(owner: String, repo: String) {
+        resetErrorMessages()
         getRepositoryUseCase(
             params = RepositoryIdUseCaseParams(
                 owner = owner,
@@ -62,7 +63,7 @@ class MainViewModel(
                 onError = {
                     showErrorMessage(it)
                     showPopup(
-                        title = "Error fetching repository",
+                        title = "Error fetching repository from internet",
                         message = it.message,
                         buttonLabel = "OK"
                     )
@@ -121,9 +122,14 @@ class MainViewModel(
                     showPopup(
                         title = "Error fetching saved repository",
                         message = it.message,
-                        buttonLabel = "OK"
+                        buttonLabel = "OK",
                     )
                 }
             )
+    }
+
+    private fun resetErrorMessages() {
+        popup.value = null
+        toast.value = null
     }
 }
