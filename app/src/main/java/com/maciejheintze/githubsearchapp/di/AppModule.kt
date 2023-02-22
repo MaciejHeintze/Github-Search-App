@@ -10,6 +10,8 @@ import com.maciejheintze.githubsearchapp.db.DATABASE_NAME
 import com.maciejheintze.githubsearchapp.db.util.Converters
 import com.maciejheintze.githubsearchapp.domain.usecase.*
 import com.maciejheintze.githubsearchapp.presentation.MainViewModel
+import com.maciejheintze.githubsearchapp.providers.CommitDataSender
+import com.maciejheintze.githubsearchapp.providers.CommitDataSenderImpl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
@@ -52,6 +54,7 @@ val appModule = module {
     single { SaveRepositoryDetailUseCase(dao = get()) }
     single { GetLocalRepositoryDetailsListUseCase(dao = get()) }
     single { GetRepositoryDetailsUseCase(dao = get()) }
+    single<CommitDataSender> { CommitDataSenderImpl() }
 
     viewModel {
         MainViewModel(
@@ -60,6 +63,7 @@ val appModule = module {
             saveRepositoryDetailUseCase = get(),
             getLocalRepositoryDetailsListUseCase = get(),
             getRepositoryDetailsUseCase = get(),
+            commitDataSender = get(),
         )
     }
 }

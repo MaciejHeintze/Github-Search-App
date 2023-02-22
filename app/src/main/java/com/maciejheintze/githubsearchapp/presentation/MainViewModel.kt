@@ -1,5 +1,6 @@
 package com.maciejheintze.githubsearchapp.presentation
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.maciejheintze.githubsearchapp.db.model.RepositoryEntity
 import com.maciejheintze.githubsearchapp.domain.doToggleLoadingStateOf
 import com.maciejheintze.githubsearchapp.domain.launchWith
 import com.maciejheintze.githubsearchapp.domain.usecase.*
+import com.maciejheintze.githubsearchapp.providers.CommitDataSender
 import kotlinx.coroutines.flow.*
 
 class MainViewModel(
@@ -18,6 +20,7 @@ class MainViewModel(
     private val saveRepositoryDetailUseCase: SaveRepositoryDetailUseCase,
     private val getLocalRepositoryDetailsListUseCase: GetLocalRepositoryDetailsListUseCase,
     private val getRepositoryDetailsUseCase: GetRepositoryDetailsUseCase,
+    private val commitDataSender: CommitDataSender,
 ) : BaseViewModel() {
 
     private val _repositoryId = MutableLiveData<GithubRepositoryId>()
@@ -61,7 +64,6 @@ class MainViewModel(
             .launchWith(
                 scope = viewModelScope,
                 onError = {
-                    showErrorMessage(it)
                     showPopup(
                         title = "Error fetching repository from internet",
                         message = it.message,
@@ -118,7 +120,6 @@ class MainViewModel(
             .launchWith(
                 scope = viewModelScope,
                 onError = {
-                    showErrorMessage(it)
                     showPopup(
                         title = "Error fetching saved repository",
                         message = it.message,
@@ -127,6 +128,18 @@ class MainViewModel(
                 }
             )
     }
+
+    fun sendSelectedCommitData(selectedCommits: List<CommitDetail>, context: Context) {
+        val message = StringBuilder()
+        selectedCommits.forEach { commit ->
+                if (commit.selected) {
+                    message.append("Message: ${commit.message} \nSHA: ${commit.shaValue} \nAuthor: ${commit.authorName}\n\n")
+                }
+        }
+        commitDataSender.sendCommitData(message.toString(), context)
+    }
+
+
 
     private fun resetErrorMessages() {
         popup.value = null

@@ -7,14 +7,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -23,7 +23,7 @@ import com.maciejheintze.githubsearchapp.db.model.CommitDetail
 import com.maciejheintze.githubsearchapp.presentation.MainViewModel
 
 @Composable
-fun SearchScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) {
+fun SearchScreen(viewModel: MainViewModel) {
     val ownerFieldState = remember { mutableStateOf(TextFieldValue()) }
     val repoFieldState = remember { mutableStateOf(TextFieldValue()) }
     val searchEnabled =
@@ -88,6 +88,14 @@ fun SearchScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) {
 
 @Composable
 fun RepositoryContent(viewModel: MainViewModel) {
+    var selectedCount by remember { mutableStateOf(0) }
+
+    val onCheckedChange: (Boolean) -> Unit = {
+        selectedCount += if (it) 1 else -1
+    }
+
+    val context = LocalContext.current
+
     Box(modifier = Modifier.fillMaxSize()) {
         viewModel.repositoryId.observeAsState().value.let { githubRepositoryId ->
             viewModel.commits.observeAsState().value.let { commitsList ->
@@ -105,7 +113,38 @@ fun RepositoryContent(viewModel: MainViewModel) {
                             if (!commitsList.isNullOrEmpty()) {
                                 LazyColumn(modifier = Modifier.weight(1f)) {
                                     items(commitsList) { commit ->
-                                        CommitItem(commit = commit)
+                                        CommitItem(
+                                            commit = commit,
+                                            selectedCount = selectedCount,
+                                            onCheckedChange = onCheckedChange,
+                                        )
+                                    }
+                                }
+                                if (selectedCount > 0) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 36.dp, vertical = 66.dp)
+                                    ) {
+                                        Button(
+                                            onClick = {
+                                                val selectedCommits =
+                                                    commitsList.filter { commit ->
+                                                        commit.selected
+                                                    }
+                                                viewModel.sendSelectedCommitData(
+                                                    selectedCommits,
+                                                    context
+                                                )
+                                            },
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp)
+                                        ) {
+                                            Text("Send Commit")
+                                            Spacer(modifier = Modifier.width(10.dp))
+                                            Icon(Icons.Default.Send, contentDescription = "Send")
+                                        }
                                     }
                                 }
                             }
@@ -118,7 +157,13 @@ fun RepositoryContent(viewModel: MainViewModel) {
 }
 
 @Composable
-fun CommitItem(commit: CommitDetail) {
+fun CommitItem(
+    commit: CommitDetail,
+    selectedCount: Int,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    var selected by remember { mutableStateOf(commit.selected) }
+
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp,
@@ -126,21 +171,39 @@ fun CommitItem(commit: CommitDetail) {
             .padding(8.dp)
             .fillMaxWidth()
     ) {
-        Column(Modifier.padding(16.dp)) {
-            Text(
-                "Message: ${commit.message}",
-                color = Color.Black,
-                fontSize = 16.sp
-            )
-            Text(
-                "SHA Value: ${commit.shaValue}",
-                color = Color.Black,
-                fontSize = 14.sp
-            )
-            Text(
-                "Author Name: ${commit.authorName}",
-                color = Color.Black,
-                fontSize = 14.sp
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(Modifier.padding(16.dp)) {
+                Text(
+                    "Message: ${commit.message}",
+                    color = Color.Black,
+                    fontSize = 16.sp
+                )
+                Text(
+                    "SHA Value: ${commit.shaValue}",
+                    color = Color.Black,
+                    fontSize = 14.sp
+                )
+                Text(
+                    "Author Name: ${commit.authorName}",
+                    color = Color.Black,
+                    fontSize = 14.sp
+                )
+            }
+            Checkbox(
+                checked = selected,
+                onCheckedChange = {
+                    selected = it
+                    commit.selected = it
+                    onCheckedChange(it)
+                },
+                modifier = Modifier
+                    .padding(end = 36.dp)
+                    .align(Alignment.CenterVertically)
             )
         }
     }
