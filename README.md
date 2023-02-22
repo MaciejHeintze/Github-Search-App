@@ -53,15 +53,15 @@ This design pattern ensures maintainability, testability, and scalability. Despi
 
 ## Screenshots
 
-![Search screen](screenshots/search.png)
+![Search screen](screenshots/search.jpg)
 
-![Search result](screenshots/searchResult.png)
+![Search result](screenshots/searchResult.jpg)
 
-![Error popup](screenshots/errorPopup.png)
+![Error popup](screenshots/errorPopup.jpg)
 
-![Saved repositories](screenshots/savedRepos.png)
+![Saved repositories](screenshots/savedRepos.jpg)
 
-![Send commits](screenshots/send.png)
+![Send commits](screenshots/send.jpg)
 
 
 
