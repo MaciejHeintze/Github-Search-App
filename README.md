@@ -88,6 +88,7 @@ Download the APK file from:
 
 ## Future Improvements
 
+
 * Internet connection observer which is notifying user regarding phone internet connection (Snackbar with notification)
 * UI/UX improvements for a more intuitive and user-friendly experience
 * Add autocomplete option to input fields to be able to prompt user with possible search query results
